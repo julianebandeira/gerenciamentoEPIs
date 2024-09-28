@@ -1,101 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de EPIs - Sistema de Gerenciamento de EPIs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .top-bar {
-            background-color: #006A6A;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .site-title {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-        .menu a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .menu a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        main {
-            padding: 2rem;
-        }
-        .page-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #006A6A;
-        }
-        .operation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .operation-button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .operation-button:hover {
-            background-color: #005555;
-        }
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .form-container div {
-            margin-bottom: 1rem;
-        }
-        .form-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-container input, .form-container select, .form-container textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #005555;
-        }
-        #mensagem {
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-    </style>
-</head>
+    {% include "partials\header.html" %}
 <body>
     <header class="top-bar">
         <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
@@ -110,120 +15,49 @@
 
     <main>
         <h2 class="page-title">Gerenciamento de EPIs</h2>
-        <div class="operation-buttons">
-            <button class="operation-button" onclick="showForm('cadastroGenerico')">Cadastrar EPI Genérico</button>
-            <button class="operation-button" onclick="showForm('cadastroCompra')">Cadastrar Compra de EPI</button>
-        </div>
 
         <div id="formContainer" class="form-container">
-            <!-- O formulário será inserido aqui dinamicamente -->
+            <h3>Cadastro de EPI Genérico</h3>
+            <form id="cadastroGenericoForm" action="{% url 'epis' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="nomeEPI">Nome do EPI:</label>
+                    <input type="text" id="nomeEPI" name="nomeEPI" required>
+                </div>
+                <div>
+                    <label for="funcoes">Funções que usam:</label>
+                    <input type="text" id="funcoes" name="funcoes" required>
+                </div>
+                <div>
+                    <label for="descricao">Descrição:</label>
+                    <textarea id="descricao" name="descricao" required></textarea>
+                </div>
+                <div>
+                    <label for="tempoUso">Tempo de uso recomendado (dias):</label>
+                    <input type="number" id="tempoUso" name="tempoUso" required>
+                </div>
+                <button type="submit" class="button">Cadastrar EPI Genérico</button>
+            </form>
         </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-        <div id="mensagem"></div>
+        <div id="listaEPIs">
+            <h3>EPIs Cadastrados</h3>
+            <ul>
+            {% for epi in epis %}
+                <li>{{ epi.nome_epi }} - Tempo de uso: {{ epi.tempo_uso_recomendado }} dias</li>
+            {% empty %}
+                <li>Nenhum EPI cadastrado.</li>
+            {% endfor %}
+            </ul>
+        </div>
     </main>
-
-    <script>
-        function showForm(operation) {
-            const formContainer = document.getElementById('formContainer');
-            const mensagem = document.getElementById('mensagem');
-            mensagem.textContent = '';
-
-            let formHTML = '';
-
-            switch(operation) {
-                case 'cadastroGenerico':
-                    formHTML = `
-                        <h3>Cadastro de EPI Genérico</h3>
-                        <form id="cadastroGenericoForm">
-                            <div>
-                                <label for="nomeEPI">Nome do EPI:</label>
-                                <input type="text" id="nomeEPI" name="nomeEPI" required>
-                            </div>
-                            <div>
-                                <label for="funcoes">Funções que usam:</label>
-                                <input type="text" id="funcoes" name="funcoes" required>
-                            </div>
-                            <div>
-                                <label for="descricao">Descrição:</label>
-                                <textarea id="descricao" name="descricao" required></textarea>
-                            </div>
-                            <div>
-                                <label for="tempoUso">Tempo de uso recomendado (dias):</label>
-                                <input type="number" id="tempoUso" name="tempoUso" required>
-                            </div>
-                            <button type="submit" class="button">Cadastrar EPI Genérico</button>
-                        </form>
-                    `;
-                    break;
-                case 'cadastroCompra':
-                    formHTML = `
-                        <h3>Cadastro de Compra de EPI</h3>
-                        <form id="cadastroCompraForm">
-                            <div>
-                                <label for="epiGenerico">EPI Genérico:</label>
-                                <select id="epiGenerico" name="epiGenerico" required>
-                                    <option value="">Selecione um EPI</option>
-                                    <!-- Opções serão preenchidas dinamicamente -->
-                                </select>
-                            </div>
-                            <div>
-                                <label for="ca">Número do CA:</label>
-                                <input type="text" id="ca" name="ca" required>
-                            </div>
-                            <div>
-                                <label for="validadeCA">Validade do CA:</label>
-                                <input type="date" id="validadeCA" name="validadeCA" required>
-                            </div>
-                            <div>
-                                <label for="quantidade">Quantidade adquirida:</label>
-                                <input type="number" id="quantidade" name="quantidade" required>
-                            </div>
-                            <button type="submit" class="button">Cadastrar Compra de EPI</button>
-                        </form>
-                    `;
-                    break;
-            }
-
-            formContainer.innerHTML = formHTML;
-            setupFormListeners();
-        }
-
-        function setupFormListeners() {
-            const cadastroGenericoForm = document.getElementById('cadastroGenericoForm');
-            const cadastroCompraForm = document.getElementById('cadastroCompraForm');
-            const mensagem = document.getElementById('mensagem');
-
-            if (cadastroGenericoForm) {
-                cadastroGenericoForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Lógica de cadastro de EPI genérico aqui
-                    mensagem.textContent = 'EPI genérico cadastrado com sucesso!';
-                    mensagem.style.color = 'green';
-                });
-            }
-
-            if (cadastroCompraForm) {
-                cadastroCompraForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Lógica de cadastro de compra de EPI aqui
-                    mensagem.textContent = 'Compra de EPI registrada com sucesso!';
-                    mensagem.style.color = 'green';
-                });
-
-                // Simulação de preenchimento do select de EPIs genéricos
-                const epiGenericoSelect = document.getElementById('epiGenerico');
-                const episMock = ['Luva de Vaqueta', 'Capacete', 'Óculos de Proteção'];
-                episMock.forEach(epi => {
-                    const option = document.createElement('option');
-                    option.value = epi;
-                    option.textContent = epi;
-                    epiGenericoSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Chamar showForm('cadastroGenerico') para exibir o formulário de cadastro genérico inicialmente
-        showForm('cadastroGenerico');
-    </script>
 </body>
 </html>

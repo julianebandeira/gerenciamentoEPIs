@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de EPIs</title>
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gerenciamento de EPIs</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/colaboradores">Gerenciamento de Colaboradores</a>
+            <a href="/epis">Gerenciamento de EPIs</a>
+            <a href="/entrega">Registro de Entrega de EPIs</a>
+            <a href="/avisos">Avisos</a>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Gerenciamento de EPIs</p>
+    </footer>
+</body>
+</html>

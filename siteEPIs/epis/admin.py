@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Colaborador, EPI, Entrega
 
-# Register your models here.
+admin.site.register(Colaborador)
+admin.site.register(EPI)
+admin.site.register(Entrega)

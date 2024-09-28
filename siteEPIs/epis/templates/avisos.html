@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+{% include "partials/header.html" %}
+<body>
+    <header class="top-bar">
+        <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
+        <nav class="menu">
+            <a href="/">Home</a>
+            <a href="/colaboradores">Gerenciamento de Colaboradores</a>
+            <a href="/epis">Gerenciamento de EPIs</a>
+            <a href="/entrega">Registro de Entrega de EPIs</a>
+            <a href="/avisos">Avisos</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2 class="page-title">Avisos e Relatórios</h2>
+
+        <div class="alert alert-info">
+            <p>Esta página está em elaboração. Novas funcionalidades serão adicionadas em breve.</p>
+        </div>
+
+        <div id="relatorios" class="form-container">
+            <h3>Gerar Relatórios</h3>
+            <form id="gerarRelatorioForm" action="{% url 'gerar_relatorio' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="tipoRelatorio">Tipo de Relatório:</label>
+                    <select id="tipoRelatorio" name="tipoRelatorio" required>
+                        <option value="">Selecione o tipo de relatório</option>
+                        <option value="epis">EPIs Cadastrados</option>
+                        <option value="colaboradores">Colaboradores Cadastrados</option>
+                        <option value="emprestimos">Empréstimos Cadastrados</option>
+                    </select>
+                </div>
+                <button type="submit" class="button">Gerar Relatório</button>
+            </form>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div id="resultadoRelatorio"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gerarRelatorioForm = document.getElementById('gerarRelatorioForm');
+            const resultadoRelatorio = document.getElementById('resultadoRelatorio');
+
+            if (gerarRelatorioForm) {
+                gerarRelatorioForm.addEventListener('submit', function(e) {
+                    // Removemos o preventDefault() para permitir o envio do formulário
+                    resultadoRelatorio.innerHTML = '<p>Gerando relatório... Por favor, aguarde.</p>';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

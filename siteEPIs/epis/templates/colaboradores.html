@@ -1,252 +1,70 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Colaboradores - Sistema de Gerenciamento de EPIs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .top-bar {
-            background-color: #006A6A;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .site-title {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-        .menu a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .menu a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        main {
-            padding: 2rem;
-        }
-        .page-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #006A6A;
-        }
-        .operation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .operation-button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .operation-button:hover {
-            background-color: #005555;
-        }
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .form-container div {
-            margin-bottom: 1rem;
-        }
-        .form-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-container input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #005555;
-        }
-        #mensagem {
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-    </style>
-</head>
+
+{% include "partials/header.html" %}
+
 <body>
     <header class="top-bar">
         <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
         <nav class="menu">
             <a href="/">Home</a>
-            <a href="/colaboradores">Gerenciamento de Colaboradores</a>
-            <a href="/epis">Gerenciamento de EPIs</a>
-            <a href="/entrega">Registro de Entrega de EPIs</a>
-            <a href="/avisos">Avisos</a>
+            <a href="{% url 'colaboradores' %}">Gerenciamento de Colaboradores</a>
+            <a href="{% url 'epis' %}">Gerenciamento de EPIs</a>
+            <a href="{% url 'entrega' %}">Registro de Entrega de EPIs</a>
+            <a href="{% url 'avisos' %}">Avisos</a>
         </nav>
     </header>
 
     <main>
         <h2 class="page-title">Gerenciamento de Colaboradores</h2>
-        <div class="operation-buttons">
-            <button class="operation-button" onclick="showForm('cadastro')">Cadastrar</button>
-            <button class="operation-button" onclick="showForm('alteracao')">Alterar</button>
-            <button class="operation-button" onclick="showForm('exclusao')">Excluir</button>
-        </div>
+        
+        <section id="cadastro" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+            <div style="width: 300px;">
+                <h3 style="text-align: center;">Cadastro de Colaborador</h3>
+                <form action="{% url 'colaboradores' %}" method="post" style="display: flex; flex-direction: column;">
+                    {% csrf_token %}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="nome">Nome do Funcionário:</label>
+                        <input type="text" id="nome" name="nome" required style="width: 100%;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" id="cpf" name="cpf" required style="width: 100%;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="telefone">Telefone:</label>
+                        <input type="tel" id="telefone" name="telefone" required style="width: 100%;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="funcao">Função:</label>
+                        <input type="text" id="funcao" name="funcao" required style="width: 100%;">
+                    </div>
+                    <button type="submit" class="button" style="width: 100%; padding: 0.5rem;">Cadastrar</button>
+                </form>
+            </div>
+        </section>
 
-        <div id="formContainer" class="form-container">
-            <!-- O formulário será inserido aqui dinamicamente -->
+        {% if messages %}
+        <div class="messages" style="text-align: center; margin-bottom: 1rem;">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
         </div>
+        {% endif %}
 
-        <div id="mensagem"></div>
+        <section id="lista-colaboradores" style="display: flex; justify-content: center;">
+            <div>
+                <h3 style="text-align: center;">Lista de Colaboradores</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                {% for colaborador in colaboradores %}
+                    <li style="margin-bottom: 0.5rem;">{{ colaborador.nome }} - {{ colaborador.cpf }} - {{ colaborador.funcao }}</li>
+                {% empty %}
+                    <li>Nenhum colaborador cadastrado.</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </section>
     </main>
-
-    <script>
-        function showForm(operation) {
-            const formContainer = document.getElementById('formContainer');
-            const mensagem = document.getElementById('mensagem');
-            mensagem.textContent = '';
-
-            let formHTML = '';
-
-            switch(operation) {
-                case 'cadastro':
-                    formHTML = `
-                        <h3>Cadastro de Colaborador</h3>
-                        <form id="cadastroForm">
-                            <div>
-                                <label for="nome">Nome do Funcionário:</label>
-                                <input type="text" id="nome" name="nome" required>
-                            </div>
-                            <div>
-                                <label for="cpf">CPF:</label>
-                                <input type="text" id="cpf" name="cpf" required>
-                            </div>
-                            <div>
-                                <label for="telefone">Telefone:</label>
-                                <input type="tel" id="telefone" name="telefone" required>
-                            </div>
-                            <div>
-                                <label for="funcao">Função:</label>
-                                <input type="text" id="funcao" name="funcao" required>
-                            </div>
-                            <button type="submit" class="button">Cadastrar</button>
-                        </form>
-                    `;
-                    break;
-                case 'alteracao':
-                    formHTML = `
-                        <h3>Alteração de Colaborador</h3>
-                        <form id="alteracaoForm">
-                            <div>
-                                <label for="cpfBusca">CPF do Colaborador:</label>
-                                <input type="text" id="cpfBusca" name="cpfBusca" required>
-                            </div>
-                            <button type="button" class="button" onclick="buscarColaborador()">Buscar</button>
-                            <div id="dadosColaborador" style="display:none;">
-                                <div>
-                                    <label for="nomeAlt">Nome do Funcionário:</label>
-                                    <input type="text" id="nomeAlt" name="nomeAlt" required>
-                                </div>
-                                <div>
-                                    <label for="telefoneAlt">Telefone:</label>
-                                    <input type="tel" id="telefoneAlt" name="telefoneAlt" required>
-                                </div>
-                                <div>
-                                    <label for="funcaoAlt">Função:</label>
-                                    <input type="text" id="funcaoAlt" name="funcaoAlt" required>
-                                </div>
-                                <button type="submit" class="button">Alterar</button>
-                            </div>
-                        </form>
-                    `;
-                    break;
-                case 'exclusao':
-                    formHTML = `
-                        <h3>Exclusão de Colaborador</h3>
-                        <form id="exclusaoForm">
-                            <div>
-                                <label for="cpfExclusao">CPF do Colaborador:</label>
-                                <input type="text" id="cpfExclusao" name="cpfExclusao" required>
-                            </div>
-                            <button type="submit" class="button">Excluir</button>
-                        </form>
-                    `;
-                    break;
-            }
-
-            formContainer.innerHTML = formHTML;
-            setupFormListeners();
-        }
-
-        function setupFormListeners() {
-            const cadastroForm = document.getElementById('cadastroForm');
-            const alteracaoForm = document.getElementById('alteracaoForm');
-            const exclusaoForm = document.getElementById('exclusaoForm');
-            const mensagem = document.getElementById('mensagem');
-
-            if (cadastroForm) {
-                cadastroForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Lógica de cadastro aqui
-                    mensagem.textContent = 'Colaborador cadastrado com sucesso!';
-                    mensagem.style.color = 'green';
-                });
-            }
-
-            if (alteracaoForm) {
-                alteracaoForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Lógica de alteração aqui
-                    mensagem.textContent = 'Dados do colaborador alterados com sucesso!';
-                    mensagem.style.color = 'green';
-                });
-            }
-
-            if (exclusaoForm) {
-                exclusaoForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Lógica de exclusão aqui
-                    mensagem.textContent = 'Colaborador excluído com sucesso!';
-                    mensagem.style.color = 'green';
-                });
-            }
-
-            // Adicionar máscaras e validações conforme necessário
-        }
-
-        function buscarColaborador() {
-            // Simulação de busca
-            const dadosColaborador = document.getElementById('dadosColaborador');
-            dadosColaborador.style.display = 'block';
-            // Preencher campos com dados do colaborador (simular busca no banco)
-        }
-
-        // Chamar showForm('cadastro') para exibir o formulário de cadastro inicialmente
-        showForm('cadastro');
-    </script>
 </body>
 </html>

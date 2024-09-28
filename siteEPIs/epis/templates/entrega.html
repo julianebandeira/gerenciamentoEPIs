@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    {% include "partials\header.html" %}
+<body>
+    <header class="top-bar">
+        <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
+        <nav class="menu">
+            <a href="/">Home</a>
+            <a href="/colaboradores">Gerenciamento de Colaboradores</a>
+            <a href="/epis">Gerenciamento de EPIs</a>
+            <a href="/entrega">Registro de Entrega de EPIs</a>
+            <a href="/avisos">Avisos</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2 class="page-title">Registro de Entrega de EPIs</h2>
+
+        <div id="formContainer" class="form-container">
+            <form id="registroEntregaForm" action="{% url 'entrega' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <label for="equipamento">Equipamento:</label>
+                    <select id="equipamento" name="equipamento" required>
+                        <option value="">Selecione um EPI</option>
+                        {% for epi in epis %}
+                            <option value="{{ epi.id }}">{{ epi.nome_epi }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="colaborador">Colaborador:</label>
+                    <select id="colaborador" name="colaborador" required>
+                        <option value="">Selecione um Colaborador</option>
+                        {% for colaborador in colaboradores %}
+                            <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="dataEmprestimo">Data do Empréstimo:</label>
+                    <input type="date" id="dataEmprestimo" name="dataEmprestimo" required>
+                </div>
+                <div>
+                    <label for="dataPrevistaDevolucao">Data Prevista de Devolução:</label>
+                    <input type="date" id="dataPrevistaDevolucao" name="dataPrevistaDevolucao" required>
+                </div>
+                <div>
+                    <label for="condicoesEquipamento">Condições do Equipamento no Empréstimo:</label>
+                    <select id="condicoesEquipamento" name="condicoesEquipamento" required>
+                        <option value="Novo" selected>Novo</option>
+                        <option value="Usado">Usado</option>
+                        <option value="Reparado">Reparado</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required>
+                        <option value="">Selecione o Status</option>
+                        <option value="Em uso">Em uso</option>
+                        <option value="Devolvido">Devolvido</option>
+                        <option value="Danificado">Danificado</option>
+                        <option value="Perdido">Perdido</option>
+                    </select>
+                </div>
+                <div id="camposAdicionais" style="display: none;">
+                    <div>
+                        <label for="dataDevolucao">Data de Devolução:</label>
+                        <input type="date" id="dataDevolucao" name="dataDevolucao">
+                    </div>
+                    <div>
+                        <label for="observacao">Observação na Devolução/Perda:</label>
+                        <textarea id="observacao" name="observacao"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="button">Registrar Entrega</button>
+            </form>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.getElementById('status');
+            const camposAdicionais = document.getElementById('camposAdicionais');
+
+            statusSelect.addEventListener('change', function() {
+                if (this.value === 'Devolvido' || this.value === 'Danificado' || this.value === 'Perdido') {
+                    camposAdicionais.style.display = 'block';
+                } else {
+                    camposAdicionais.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
