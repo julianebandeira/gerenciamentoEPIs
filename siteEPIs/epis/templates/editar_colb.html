@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 {% include "partials/header.html" %}
+<head>
+    <style>
+        body {
+                       justify-content: center; /* Alinha horizontalmente ao centro */
+            margin: 0; /* Remove margem padrão do body */
+        }
+
+        #lista-colaboradores {
+            max-width: 800px; /* Define uma largura máxima para o contêiner */
+            width: 100%; /* Faz o contêiner ocupar 100% da largura disponível */
+            margin: 20px; /* Adiciona margem em torno do contêiner */
+            padding: 20px; /* Adiciona preenchimento interno ao contêiner */
+            border: 1px solid #ccc; /* Opcional: borda ao redor do contêiner */
+            border-radius: 5px; /* Opcional: bordas arredondadas */
+            background-color: #fff; /* Opcional: cor de fundo */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra para destaque */
+        }
+
+        table {
+            width: 100%; /* Faz a tabela ocupar toda a largura do contêiner */
+            border-collapse: collapse; /* Remove espaço entre as células */
+        }
+
+        th, td {
+            padding: 10px; /* Adiciona espaço interno às células */
+            text-align: left; /* Alinha o texto à esquerda */
+            border: 1px solid #ccc; /* Adiciona uma borda leve */
+            min-height: 40px; /* Define uma altura mínima para as células */
+        }
+
+        th {
+            background-color: #f4f4f4; /* Altera a cor de fundo do cabeçalho */
+        }
+    </style>
+</head>
 <body>
     <main>
         <h2 class="page-title">Editar/Excluir Colaboradores</h2>
