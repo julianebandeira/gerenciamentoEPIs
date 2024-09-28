@@ -1,0 +1,55 @@
+{% include "partials/header.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<body>
+    <main>
+        <h2 class="page-title">Consultar/Editar Entrega</h2>
+        
+        <div id="busca-entrega" class="form-container">
+            <h3>Buscar Entregas por Colaborador</h3>
+            <form action="{% url 'consultar_entrega' %}" method="get">
+                <div>
+                    <label for="colaborador">Nome do Colaborador:</label>
+                    <input type="text" id="colaborador" name="colaborador" required>
+                </div>
+                <button type="submit" class="button">Buscar</button>
+            </form>
+        </div>
+
+        {% if entregas %}
+        <div id="lista-entregas" class="form-container">
+            <h3>Entregas Encontradas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Equipamento</th>
+                        <th>Colaborador</th>
+                        <th>Data de Empréstimo</th>
+                        <th>Data Prevista de Devolução</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entrega in entregas %}
+                    <tr>
+                        <td>{{ entrega.equipamento.nome_epi }}</td>
+                        <td>{{ entrega.colaborador.nome }}</td>
+                        <td>{{ entrega.data_emprestimo }}</td>
+                        <td>{{ entrega.data_prevista_devolucao }}</td>
+                        <td>{{ entrega.status }}</td>
+                        <td>
+                            <a href="{% url 'editar_entrega' entrega.id %}" class="button">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif search_performed %}
+        <p>Nenhuma entrega encontrada para o colaborador informado.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

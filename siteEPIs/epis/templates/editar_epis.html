@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+{% include "partials/header.html" %}
+<body>
+    <main>
+        <h2 class="page-title">Editar/Excluir EPIs</h2>
+        
+        <div id="lista-epis" class="form-container">
+            <h3>Lista de EPIs</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome do EPI</th>
+                        <th>Funções</th>
+                        <th>Descrição</th>
+                        <th>Tempo de Uso Recomendado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for epi in epis %}
+                    <tr>
+                        <td>{{ epi.nome_epi }}</td>
+                        <td>{{ epi.funcoes }}</td>
+                        <td>{{ epi.descricao }}</td>
+                        <td>{{ epi.tempo_uso_recomendado }} dias</td>
+                        <td>
+                            <a href="{% url 'editar_epi' epi.id %}" class="button">Editar</a>
+                            <a href="{% url 'excluir_epi' epi.id %}" class="button" onclick="return confirm('Tem certeza que deseja excluir este EPI?')">Excluir</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">Nenhum EPI cadastrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

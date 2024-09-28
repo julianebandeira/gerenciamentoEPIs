@@ -1,4 +1,4 @@
-<head></head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Colaboradores - Sistema de Gerenciamento de EPIs</title>
@@ -33,6 +33,30 @@
         }
         .menu a:hover {
             background-color: rgba(255, 255, 255, 0.2);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown:hover .submenu {
+            display: block;
+        }
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: #006A6A;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .submenu a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .submenu a:hover {
+            background-color: #005555;
         }
         main {
             padding: 2rem;
@@ -94,3 +118,32 @@
         }
     </style>
 </head>
+<body>
+    <header class="top-bar">
+        <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
+        <nav class="menu">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Gerenciamento de Colaboradores</a>
+                <div class="submenu">
+                    <a href="/colaboradores">Cadastrar Colaboradores</a>
+                    <a href="/editar-colaboradores">Editar/Excluir Colaboradores</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Gerenciamento de EPIs</a>
+                <div class="submenu">
+                    <a href="/epis">Cadastrar EPIs</a>
+                    <a href="/editar-epis">Editar/Excluir EPIs</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Registro de Entrega de EPIs</a>
+                <div class="submenu">
+                    <a href="/entrega">Registrar Entrega EPIs</a>
+                    <a href="/consultar-entrega">Consultar/Editar Entrega</a>
+                </div>
+            </div>
+            <a href="/avisos">Avisos</a>
+        </nav>
+    </header>

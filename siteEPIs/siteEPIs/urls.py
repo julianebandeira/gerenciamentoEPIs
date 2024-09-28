@@ -10,4 +10,12 @@ urlpatterns = [
     path('entrega/', views.entrega, name='entrega'),  # Corrigido
     path('avisos/', views.avisos, name='avisos'),
     path('gerar-relatorio/', views.gerar_relatorio, name='gerar_relatorio'),
+    path('editar-colaboradores/', views.editar_colaboradores, name='editar_colaboradores'),
+    path('editar-colaborador/<int:colaborador_id>/', views.editar_colaborador, name='editar_colaborador'),
+    path('excluir-colaborador/<int:colaborador_id>/', views.excluir_colaborador, name='excluir_colaborador'),
+    path('editar-epis/', views.editar_epis, name='editar_epis'),
+    path('editar-epi/<int:epi_id>/', views.editar_epi, name='editar_epi'),
+    path('excluir-epi/<int:epi_id>/', views.excluir_epi, name='excluir_epi'),
+    path('consultar-entrega/', views.consultar_entrega, name='consultar_entrega'),
+    path('editar-entrega/<int:entrega_id>/', views.editar_entrega, name='editar_entrega'),
 ]

@@ -99,3 +99,73 @@ def gerar_relatorio(request):
 
     # Se não for uma requisição POST, redireciona para a página de avisos
     return redirect('avisos')
+
+def editar_colaboradores(request):
+    colaboradores = Colaborador.objects.all()
+    return render(request, 'editar_colb.html', {'colaboradores': colaboradores})
+
+def editar_colaborador(request, colaborador_id):
+    colaborador = get_object_or_404(Colaborador, id=colaborador_id)
+    if request.method == 'POST':
+        # Lógica para atualizar o colaborador
+        colaborador.nome = request.POST['nome']
+        colaborador.cpf = request.POST['cpf']
+        colaborador.telefone = request.POST['telefone']
+        colaborador.funcao = request.POST['funcao']
+        colaborador.save()
+        messages.success(request, 'Colaborador atualizado com sucesso!')
+        return redirect('editar_colaboradores')
+    return render(request, 'editar_colaborador.html', {'colaborador': colaborador})
+
+def excluir_colaborador(request, colaborador_id):
+    colaborador = get_object_or_404(Colaborador, id=colaborador_id)
+    colaborador.delete()
+    messages.success(request, 'Colaborador excluído com sucesso!')
+    return redirect('editar_colaboradores')
+
+def editar_epis(request):
+    epis = EPI.objects.all()
+    return render(request, 'editar_epis.html', {'epis': epis})
+
+def editar_epi(request, epi_id):
+    epi = get_object_or_404(EPI, id=epi_id)
+    if request.method == 'POST':
+        # Lógica para atualizar o EPI
+        epi.nome_epi = request.POST['nome_epi']
+        epi.funcoes = request.POST['funcoes']
+        epi.descricao = request.POST['descricao']
+        epi.tempo_uso_recomendado = request.POST['tempo_uso_recomendado']
+        epi.save()
+        messages.success(request, 'EPI atualizado com sucesso!')
+        return redirect('editar_epis')
+    return render(request, 'editar_epi.html', {'epi': epi})
+
+def excluir_epi(request, epi_id):
+    epi = get_object_or_404(EPI, id=epi_id)
+    epi.delete()
+    messages.success(request, 'EPI excluído com sucesso!')
+    return redirect('editar_epis')
+
+def consultar_entrega(request):
+    search_performed = False
+    entregas = None
+    if 'colaborador' in request.GET:
+        search_performed = True
+        colaborador_nome = request.GET['colaborador']
+        entregas = Entrega.objects.filter(colaborador__nome__icontains=colaborador_nome)
+    return render(request, 'consultar_entrega.html', {
+        'entregas': entregas,
+        'search_performed': search_performed
+    })
+
+def editar_entrega(request, entrega_id):
+    entrega = get_object_or_404(Entrega, id=entrega_id)
+    if request.method == 'POST':
+        # Lógica para atualizar a entrega
+        entrega.status = request.POST['status']
+        entrega.data_devolucao = request.POST.get('data_devolucao')
+        entrega.observacao = request.POST.get('observacao')
+        entrega.save()
+        messages.success(request, 'Entrega atualizada com sucesso!')
+        return redirect('consultar_entrega')
+    return render(request, 'editar_entrega.html', {'entrega': entrega})

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+{% include "partials/header.html" %}
+<body>
+    <main>
+        <h2 class="page-title">Editar/Excluir Colaboradores</h2>
+        
+        <div id="lista-colaboradores" class="form-container">
+            <h3>Lista de Colaboradores</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Função</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for colaborador in colaboradores %}
+                    <tr>
+                        <td>{{ colaborador.nome }}</td>
+                        <td>{{ colaborador.cpf }}</td>
+                        <td>{{ colaborador.telefone }}</td>
+                        <td>{{ colaborador.funcao }}</td>
+                        <td>
+                            <a href="{% url 'editar_colaborador' colaborador.id %}" class="button">Editar</a>
+                            <a href="{% url 'excluir_colaborador' colaborador.id %}" class="button" onclick="return confirm('Tem certeza que deseja excluir este colaborador?')">Excluir</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">Nenhum colaborador cadastrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
