@@ -1,0 +1,17 @@
+{% include "partials/header.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body> 
+
+{% block content %}
+<h2>Confirmar Exclusão</h2>
+<p>Tem certeza que deseja excluir o colaborador "{{ colaborador.nome }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Exclusão</button>
+</form>
+<a href="{% url 'editar_colaboradores' %}">Cancelar</a>
+{% endblock %}
+
+</body>
+</html>

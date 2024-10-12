@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Colaborador, EPI, Entrega
 from django.http import HttpResponse
+from .forms import ColaboradorForm, EPIForm
 import csv
 
 def index(request):
@@ -107,21 +108,22 @@ def editar_colaboradores(request):
 def editar_colaborador(request, colaborador_id):
     colaborador = get_object_or_404(Colaborador, id=colaborador_id)
     if request.method == 'POST':
-        # Lógica para atualizar o colaborador
-        colaborador.nome = request.POST['nome']
-        colaborador.cpf = request.POST['cpf']
-        colaborador.telefone = request.POST['telefone']
-        colaborador.funcao = request.POST['funcao']
-        colaborador.save()
-        messages.success(request, 'Colaborador atualizado com sucesso!')
-        return redirect('editar_colaboradores')
-    return render(request, 'editar_colaborador.html', {'colaborador': colaborador})
+        form = ColaboradorForm(request.POST, instance=colaborador)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Colaborador atualizado com sucesso!')
+            return redirect('editar_colaboradores')
+    else:
+        form = ColaboradorForm(instance=colaborador)
+    return render(request, 'editar_colaborador.html', {'form': form, 'colaborador': colaborador})
 
 def excluir_colaborador(request, colaborador_id):
     colaborador = get_object_or_404(Colaborador, id=colaborador_id)
-    colaborador.delete()
-    messages.success(request, 'Colaborador excluído com sucesso!')
-    return redirect('editar_colaboradores')
+    if request.method == 'POST':
+        colaborador.delete()
+        messages.success(request, 'Colaborador excluído com sucesso!')
+        return redirect('editar_colaboradores')
+    return render(request, 'confirmar_exclusao.html', {'colaborador': colaborador})
 
 def editar_epis(request):
     epis = EPI.objects.all()
@@ -130,15 +132,14 @@ def editar_epis(request):
 def editar_epi(request, epi_id):
     epi = get_object_or_404(EPI, id=epi_id)
     if request.method == 'POST':
-        # Lógica para atualizar o EPI
-        epi.nome_epi = request.POST['nome_epi']
-        epi.funcoes = request.POST['funcoes']
-        epi.descricao = request.POST['descricao']
-        epi.tempo_uso_recomendado = request.POST['tempo_uso_recomendado']
-        epi.save()
-        messages.success(request, 'EPI atualizado com sucesso!')
-        return redirect('editar_epis')
-    return render(request, 'editar_epi.html', {'epi': epi})
+        form = EPIForm(request.POST, instance=epi)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'EPI atualizado com sucesso!')
+            return redirect('editar_epis')
+    else:
+        form = EPIForm(instance=epi)
+    return render(request, 'editar_epi.html', {'form': form, 'epi': epi})
 
 def excluir_epi(request, epi_id):
     epi = get_object_or_404(EPI, id=epi_id)

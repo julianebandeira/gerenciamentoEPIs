@@ -1,38 +1,52 @@
+{% include "partials/header.html" %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-{% include "partials/header.html" %}
-<head></head>
+<head>
     <style>
         body {
-            justify-content: center; /* Alinha horizontalmente ao centro */
-            margin: 0; /* Remove margem padrão do body */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            min-height: 100vh;
         }
 
-        #lista-colaboradores {
-            max-width: 1000px; /* Define uma largura máxima para o contêiner */
-            width: 170%; /* Faz o contêiner ocupar 100% da largura disponível */
-            margin: 20px; /* Adiciona margem em torno do contêiner */
-            padding: 20px; /* Adiciona preenchimento interno ao contêiner */
-            border: 1px solid #ccc; /* Opcional: borda ao redor do contêiner */
-            border-radius: 5px; /* Opcional: bordas arredondadas */
-            background-color: #fff; /* Opcional: cor de fundo */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: sombra para destaque */
+        main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #lista-epis {
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         table {
-            width: 170%; /* Faz a tabela ocupar toda a largura do contêiner */
-            border-collapse: collapse; /* Remove espaço entre as células */
+            width: 100%;
+            border-collapse: collapse;
         }
 
         th, td {
-            padding: 10px; /* Adiciona espaço interno às células */
-            text-align: left; /* Alinha o texto à esquerda */
-            border: 1px solid #ccc; /* Adiciona uma borda leve */
-            min-height: 40px; /* Define uma altura mínima para as células */
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+            min-height: 40px;
         }
 
         th {
-            background-color: #f4f4f4; /* Altera a cor de fundo do cabeçalho */
+            background-color: #f4f4f4;
+        }
+
+        .page-title {
+            text-align: center;
         }
     </style>
 </head>

@@ -1,0 +1,30 @@
+{% include "partials/header.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body>
+    {% block content %}
+    <h2>Editar EPI</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.nome_epi.id_for_label }}">Nome do EPI:</label>
+            {{ form.nome_epi }}
+        </div>
+        <div>
+            <label for="{{ form.funcoes.id_for_label }}">Funções:</label>
+            {{ form.funcoes }}
+        </div>
+        <div>
+            <label for="{{ form.descricao.id_for_label }}">Descrição:</label>
+            {{ form.descricao }}
+        </div>
+        <div>
+            <label for="{{ form.tempo_uso_recomendado.id_for_label }}">Tempo de Uso Recomendado:</label>
+            {{ form.tempo_uso_recomendado }}
+        </div>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+    <a href="{% url 'editar_epis' %}">Cancelar</a>
+    {% endblock %}
+</body>
+</html>

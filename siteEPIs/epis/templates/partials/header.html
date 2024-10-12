@@ -3,123 +3,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Colaboradores - Sistema de Gerenciamento de EPIs</title>
     <style>
+        /* Estilos globais */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
-        .top-bar {
-            background-color: #006A6A;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
+        
+        /* Estilos específicos do cabeçalho */
+        .sge-header {
+            background-color: #006A6A !important;
+            color: white !important;
+            padding: 1rem 0 !important;
+            text-align: center !important;
         }
-        .site-title {
-            margin: 0;
-            font-size: 1.5rem;
+        .sge-header .site-title {
+            margin: 0 !important;
+            font-size: 1.5rem !important;
         }
-        .menu {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 0.5rem;
+        .sge-header .menu {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 1rem !important;
+            margin-top: 0.5rem !important;
         }
-        .menu a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+        .sge-header .menu a {
+            color: white !important;
+            text-decoration: none !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 5px !important;
+            transition: background-color 0.3s ease !important;
         }
-        .menu a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .sge-header .menu a:hover {
+            background-color: rgba(255, 255, 255, 0.2) !important;
         }
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        .sge-header .dropdown {
+            position: relative !important;
+            display: inline-block !important;
         }
-        .dropdown:hover .submenu {
-            display: block;
+        .sge-header .dropdown:hover .submenu {
+            display: block !important;
         }
-        .submenu {
-            display: none;
-            position: absolute;
-            background-color: #006A6A;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+        .sge-header .submenu {
+            display: none !important;
+            position: absolute !important;
+            background-color: #006A6A !important;
+            min-width: 160px !important;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2) !important;
+            z-index: 1000 !important;
         }
-        .submenu a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
+        .sge-header .submenu a {
+            color: white !important;
+            padding: 12px 16px !important;
+            text-decoration: none !important;
+            display: block !important;
         }
-        .submenu a:hover {
-            background-color: #005555;
-        }
-        main {
-            padding: 2rem;
-        }
-        .page-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #006A6A;
-        }
-        .operation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .operation-button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .operation-button:hover {
-            background-color: #005555;
-        }
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .form-container div {
-            margin-bottom: 1rem;
-        }
-        .form-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-container input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .button {
-            background-color: #006A6A;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #005555;
-        }
-        #mensagem {
-            margin-top: 1rem;
-            font-weight: bold;
+        .sge-header .submenu a:hover {
+            background-color: #005555 !important;
         }
     </style>
 </head>
 <body>
-    <header class="top-bar">
+    <header class="sge-header">
         <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
         <nav class="menu">
             <a href="/">Home</a>
@@ -147,3 +92,4 @@
             <a href="/avisos">Avisos</a>
         </nav>
     </header>
+</body>

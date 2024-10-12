@@ -1,0 +1,18 @@
+{% include "partials/header.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body> 
+
+    {% block content %}
+    <h2>Editar Colaborador</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar Alterações</button>
+    </form>
+    <a href="{% url 'editar_colaboradores' %}">Cancelar</a>
+    {% endblock %}
+
+</body>
+</html>
+
