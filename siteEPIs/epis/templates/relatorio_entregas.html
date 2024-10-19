@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Relatório de Entregas de EPIs</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="colaborador">Colaborador:</label>
+        <select id="colaborador" name="colaborador">
+            <option value="">Todos os colaboradores</option>
+            {% for colaborador in colaboradores %}
+                <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="">Todos os status</option>
+            <option value="Em uso">Em uso</option>
+            <option value="Devolvido">Devolvido</option>
+            <option value="Danificado">Danificado</option>
+            <option value="Perdido">Perdido</option>
+        </select>
+    </div>
+    <button type="submit">Filtrar</button>
+</form>
+
+{% if filtro_aplicado %}
+    {% if entregas %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Colaborador</th>
+                    <th>EPI</th>
+                    <th>Data de Empréstimo</th>
+                    <th>Data Prevista de Devolução</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entrega in entregas %}
+                <tr>
+                    <td>{{ entrega.colaborador.nome }}</td>
+                    <td>{{ entrega.equipamento.nome_epi }}</td>
+                    <td>{{ entrega.data_emprestimo }}</td>
+                    <td>{{ entrega.data_prevista_devolucao }}</td>
+                    <td>{{ entrega.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma entrega encontrada com os filtros selecionados.</p>
+    {% endif %}
+{% else %}
+    <p>Use o formulário acima para filtrar as entregas.</p>
+{% endif %}
+{% endblock %}

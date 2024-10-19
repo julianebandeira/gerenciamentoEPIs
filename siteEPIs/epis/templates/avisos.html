@@ -1,27 +1,69 @@
 {% include "partials/header.html" %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos e Relatórios</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-container {
+            width: 80%;
+            margin: 20px auto;
+        }
+        #resultadoRelatorio {
+            width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
 <body>
     
     <main>
         <h2 class="page-title">Avisos e Relatórios</h2>
 
         <div class="alert alert-info" style="text-align: center;">
-            <p>Esta página está em elaboração. Novas funcionalidades serão adicionadas em breve.</p>
+            <p>Esta página está em elaboração. Novas funcionalidades serão adicionadas.</p>
             <hr style="width: 50%; margin: 10px auto;">
         </div>
 
         <div id="relatorios" class="form-container">
             <h3>Gerar Relatórios</h3>
-            <form id="gerarRelatorioForm" action="{% url 'gerar_relatorio' %}" method="post">
+            <form id="gerarRelatorioForm">
                 {% csrf_token %}
                 <div>
                     <label for="tipoRelatorio">Tipo de Relatório:</label>
                     <select id="tipoRelatorio" name="tipoRelatorio" required>
                         <option value="">Selecione o tipo de relatório</option>
-                        <option value="epis">EPIs Cadastrados</option>
                         <option value="colaboradores">Colaboradores Cadastrados</option>
-                        <option value="emprestimos">Empréstimos Cadastrados</option>
+                        <option value="epis">EPIs Cadastrados</option>
+                        <option value="entregas">Entregas de EPIs</option>
+                    </select>
+                </div>
+                <div id="pesquisaEntregas" style="display: none;">
+                    <label for="colaborador">Colaborador:</label>
+                    <select id="colaborador" name="colaborador">
+                        <option value="">Selecione um colaborador</option>
+                    </select>
+                    <label for="status">Status:</label>
+                    <select id="status" name="status">
+                        <option value="">Todos</option>
+                        <option value="Em uso">Em uso</option>
+                        <option value="Devolvido">Devolvido</option>
+                        <option value="Danificado">Danificado</option>
+                        <option value="Perdido">Perdido</option>
                     </select>
                 </div>
                 <button type="submit" class="button">Gerar Relatório</button>
@@ -42,14 +84,70 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const gerarRelatorioForm = document.getElementById('gerarRelatorioForm');
+            const tipoRelatorio = document.getElementById('tipoRelatorio');
+            const pesquisaEntregas = document.getElementById('pesquisaEntregas');
             const resultadoRelatorio = document.getElementById('resultadoRelatorio');
+            const colaboradorSelect = document.getElementById('colaborador');
 
-            if (gerarRelatorioForm) {
-                gerarRelatorioForm.addEventListener('submit', function(e) {
-                    // Removemos o preventDefault() para permitir o envio do formulário
-                    resultadoRelatorio.innerHTML = '<p>Gerando relatório... Por favor, aguarde.</p>';
+            // Carregar colaboradores para o select
+            fetch('/api/colaboradores/')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(colaborador => {
+                        const option = document.createElement('option');
+                        option.value = colaborador.id;
+                        option.textContent = colaborador.nome;
+                        colaboradorSelect.appendChild(option);
+                    });
                 });
-            }
+
+            tipoRelatorio.addEventListener('change', function() {
+                pesquisaEntregas.style.display = this.value === 'entregas' ? 'block' : 'none';
+            });
+
+            gerarRelatorioForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch('/gerar_relatorio/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        resultadoRelatorio.innerHTML = '<p>Nenhum resultado encontrado.</p>';
+                        return;
+                    }
+
+                    let tableHTML = '<table><thead><tr>';
+                    
+                    // Criar cabeçalho da tabela
+                    Object.keys(data[0]).forEach(key => {
+                        tableHTML += `<th>${key}</th>`;
+                    });
+                    tableHTML += '</tr></thead><tbody>';
+                    
+                    // Preencher dados da tabela
+                    data.forEach(row => {
+                        tableHTML += '<tr>';
+                        Object.values(row).forEach(value => {
+                            tableHTML += `<td>${value}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    resultadoRelatorio.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    resultadoRelatorio.innerHTML = '<p>Erro ao gerar relatório. Por favor, tente novamente.</p>';
+                });
+            });
         });
     </script>
 </body>

@@ -1,8 +1,75 @@
-{% include "partials/header.html" %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+{% include "partials/header.html" %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar/Editar Entrega</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #006A6A;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        select, button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #006A6A;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #006A6A;
+            color: white;
+            border-radius: 4px;
+        }
+    </style>
+</head>
 <body>
-    <main>
+    <div class="container">
         <h2 class="page-title">Consultar/Editar Entrega</h2>
         
         <div id="busca-entrega" class="form-container">
@@ -10,7 +77,12 @@
             <form action="{% url 'consultar_entrega' %}" method="get">
                 <div>
                     <label for="colaborador">Nome do Colaborador:</label>
-                    <input type="text" id="colaborador" name="colaborador" required>
+                    <select id="colaborador" name="colaborador" required>
+                        <option value="">Selecione um colaborador</option>
+                        {% for colaborador in colaboradores %}
+                            <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <button type="submit" class="button">Buscar</button>
             </form>
@@ -49,6 +121,6 @@
         {% elif search_performed %}
         <p>Nenhuma entrega encontrada para o colaborador informado.</p>
         {% endif %}
-    </main>
+    </div>
 </body>
 </html>

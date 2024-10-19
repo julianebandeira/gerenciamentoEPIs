@@ -47,22 +47,8 @@
                 <div>
                     <label for="status">Status:</label>
                     <select id="status" name="status" required>
-                        <option value="">Selecione o Status</option>
-                        <option value="Em uso">Em uso</option>
-                        <option value="Devolvido">Devolvido</option>
-                        <option value="Danificado">Danificado</option>
-                        <option value="Perdido">Perdido</option>
+                        <option value="Em uso" selected>Em uso</option>
                     </select>
-                </div>
-                <div id="camposAdicionais" style="display: none;">
-                    <div>
-                        <label for="dataDevolucao">Data de Devolução:</label>
-                        <input type="date" id="dataDevolucao" name="dataDevolucao">
-                    </div>
-                    <div>
-                        <label for="observacao">Observação na Devolução/Perda:</label>
-                        <textarea id="observacao" name="observacao"></textarea>
-                    </div>
                 </div>
                 <button type="submit" class="button">Registrar Entrega</button>
             </form>
@@ -77,19 +63,5 @@
         {% endif %}
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusSelect = document.getElementById('status');
-            const camposAdicionais = document.getElementById('camposAdicionais');
-
-            statusSelect.addEventListener('change', function() {
-                if (this.value === 'Devolvido' || this.value === 'Danificado' || this.value === 'Perdido') {
-                    camposAdicionais.style.display = 'block';
-                } else {
-                    camposAdicionais.style.display = 'none';
-                }
-            });
-        });
-    </script>
-</body>
+    </body>
 </html>

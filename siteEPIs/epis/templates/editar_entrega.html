@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+{% include "partials/header.html" %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Entrega de EPI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #006A6A;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #006A6A;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #005555;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Editar Entrega de EPI</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="equipamento">Equipamento:</label>
+            <input type="text" id="equipamento" name="equipamento" value="{{ entrega.equipamento.nome_epi }}" readonly>
+            
+            <label for="colaborador">Colaborador:</label>
+            <input type="text" id="colaborador" name="colaborador" value="{{ entrega.colaborador.nome }}" readonly>
+            
+            <label for="data_emprestimo">Data de Empréstimo:</label>
+            <input type="date" id="data_emprestimo" name="data_emprestimo" value="{{ entrega.data_emprestimo|date:'Y-m-d' }}" readonly>
+            
+            <label for="data_prevista_devolucao">Data Prevista de Devolução:</label>
+            <input type="date" id="data_prevista_devolucao" name="data_prevista_devolucao" value="{{ entrega.data_prevista_devolucao|date:'Y-m-d' }}" readonly>
+            
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="Em uso" {% if entrega.status == 'Em uso' %}selected{% endif %}>Em uso</option>
+                <option value="Devolvido" {% if entrega.status == 'Devolvido' %}selected{% endif %}>Devolvido</option>
+                <option value="Danificado" {% if entrega.status == 'Danificado' %}selected{% endif %}>Danificado</option>
+                <option value="Perdido" {% if entrega.status == 'Perdido' %}selected{% endif %}>Perdido</option>
+            </select>
+            
+            <label for="data_devolucao">Data de Devolução:</label>
+            <input type="date" id="data_devolucao" name="data_devolucao" value="{{ entrega.data_devolucao|date:'Y-m-d' }}">
+            
+            <label for="observacao">Observação:</label>
+            <textarea id="observacao" name="observacao" rows="4">{{ entrega.observacao }}</textarea>
+            
+            <button type="submit">Salvar Alterações</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.getElementById('status');
+            const dataDevolucaoInput = document.getElementById('data_devolucao');
+            const observacaoTextarea = document.getElementById('observacao');
+
+            function toggleFields() {
+                if (statusSelect.value === 'Em uso') {
+                    dataDevolucaoInput.disabled = true;
+                    observacaoTextarea.disabled = true;
+                } else {
+                    dataDevolucaoInput.disabled = false;
+                    observacaoTextarea.disabled = false;
+                }
+            }
+
+            statusSelect.addEventListener('change', toggleFields);
+            toggleFields(); // Call on page load
+        });
+    </script>
+</body>
+</html>

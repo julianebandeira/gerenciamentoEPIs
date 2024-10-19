@@ -4,6 +4,9 @@ from .models import Colaborador, EPI, Entrega
 from django.http import HttpResponse
 from .forms import ColaboradorForm, EPIForm
 import csv
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.db.models import Q
 
 def index(request):
     return render(request, 'index.html')
@@ -74,32 +77,35 @@ def entrega(request):
 def avisos(request):
     return render(request, 'avisos.html')
 
+@require_POST
 def gerar_relatorio(request):
-    if request.method == 'POST':
-        tipo_relatorio = request.POST['tipoRelatorio']
+    tipo_relatorio = request.POST.get('tipoRelatorio')
+    
+    if tipo_relatorio == 'epis':
+        data = list(EPI.objects.values('nome_epi', 'funcoes', 'descricao', 'tempo_uso_recomendado'))
+    elif tipo_relatorio == 'colaboradores':
+        data = list(Colaborador.objects.values('nome', 'cpf', 'telefone', 'funcao'))
+    elif tipo_relatorio == 'entregas':
+        colaborador_id = request.POST.get('colaborador')
+        status = request.POST.get('status')
         
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename="{tipo_relatorio}.csv"'
+        query = Entrega.objects.all()
+        if colaborador_id:
+            query = query.filter(colaborador_id=colaborador_id)
+        if status:
+            query = query.filter(status=status)
         
-        writer = csv.writer(response)
-        
-        if tipo_relatorio == 'epis':
-            writer.writerow(['Nome', 'Funções', 'Descrição', 'Tempo de Uso Recomendado'])
-            for epi in EPI.objects.all():
-                writer.writerow([epi.nome_epi, epi.funcoes, epi.descricao, epi.tempo_uso_recomendado])
-        elif tipo_relatorio == 'colaboradores':
-            writer.writerow(['Nome', 'CPF', 'Telefone', 'Função'])
-            for colaborador in Colaborador.objects.all():
-                writer.writerow([colaborador.nome, colaborador.cpf, colaborador.telefone, colaborador.funcao])
-        elif tipo_relatorio == 'emprestimos':
-            writer.writerow(['Equipamento', 'Colaborador', 'Data Empréstimo', 'Data Prevista Devolução', 'Status'])
-            for entrega in Entrega.objects.all():
-                writer.writerow([entrega.equipamento.nome_epi, entrega.colaborador.nome, entrega.data_emprestimo, entrega.data_prevista_devolucao, entrega.status])
-        
-        return response
+        data = list(query.values(
+            'equipamento__nome_epi',
+            'colaborador__nome',
+            'data_emprestimo',
+            'data_prevista_devolucao',
+            'status'
+        ))
+    else:
+        data = []
 
-    # Se não for uma requisição POST, redireciona para a página de avisos
-    return redirect('avisos')
+    return JsonResponse(data, safe=False)
 
 def editar_colaboradores(request):
     colaboradores = Colaborador.objects.all()
@@ -150,13 +156,19 @@ def excluir_epi(request, epi_id):
 def consultar_entrega(request):
     search_performed = False
     entregas = None
-    if 'colaborador' in request.GET:
+    colaboradores = Colaborador.objects.all()
+    
+    print(f"Número de colaboradores: {colaboradores.count()}")  # Debug print
+    
+    if 'colaborador' in request.GET and request.GET['colaborador']:
         search_performed = True
-        colaborador_nome = request.GET['colaborador']
-        entregas = Entrega.objects.filter(colaborador__nome__icontains=colaborador_nome)
+        colaborador_id = request.GET['colaborador']
+        entregas = Entrega.objects.filter(colaborador_id=colaborador_id)
+    
     return render(request, 'consultar_entrega.html', {
         'entregas': entregas,
-        'search_performed': search_performed
+        'search_performed': search_performed,
+        'colaboradores': colaboradores
     })
 
 def editar_entrega(request, entrega_id):
@@ -170,3 +182,29 @@ def editar_entrega(request, entrega_id):
         messages.success(request, 'Entrega atualizada com sucesso!')
         return redirect('consultar_entrega')
     return render(request, 'editar_entrega.html', {'entrega': entrega})
+
+def relatorio_entregas(request):
+    colaboradores = Colaborador.objects.all().order_by('nome')
+    entregas = None
+    filtro_aplicado = False
+
+    if request.method == 'POST':
+        colaborador_id = request.POST.get('colaborador')
+        status = request.POST.get('status')
+        
+        query = Entrega.objects.all()
+        if colaborador_id:
+            query = query.filter(colaborador_id=colaborador_id)
+        if status:
+            query = query.filter(status=status)
+        
+        entregas = query.select_related('equipamento', 'colaborador').order_by('-data_emprestimo')
+        filtro_aplicado = True
+
+    context = {
+        'colaboradores': colaboradores,
+        'entregas': entregas,
+        'filtro_aplicado': filtro_aplicado
+    }
+    
+    return render(request, 'relatorio_entregas.html', context)

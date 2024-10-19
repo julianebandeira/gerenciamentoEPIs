@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +22,13 @@
         .sge-header .site-title {
             margin: 0 !important;
             font-size: 1.5rem !important;
+        }
+        .sge-header .menu-container {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 0 1rem !important;
+            position: relative !important;
         }
         .sge-header .menu {
             display: flex !important;
@@ -61,35 +70,49 @@
         .sge-header .submenu a:hover {
             background-color: #005555 !important;
         }
+        .user-icon {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            position: absolute !important;
+            right: 1rem !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+        }
     </style>
 </head>
 <body>
     <header class="sge-header">
         <h1 class="site-title">Sistema de Gerenciamento de EPIs</h1>
-        <nav class="menu">
-            <a href="/">Home</a>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Gerenciamento de Colaboradores</a>
-                <div class="submenu">
-                    <a href="/colaboradores">Cadastrar Colaboradores</a>
-                    <a href="/editar-colaboradores">Editar/Excluir Colaboradores</a>
+        <div class="menu-container">
+            <nav class="menu">
+                <a href="/">Home</a>
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Gerenciamento de Colaboradores</a>
+                    <div class="submenu">
+                        <a href="/colaboradores">Cadastrar Colaboradores</a>
+                        <a href="/editar-colaboradores">Editar/Excluir Colaboradores</a>
+                    </div>
                 </div>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Gerenciamento de EPIs</a>
-                <div class="submenu">
-                    <a href="/epis">Cadastrar EPIs</a>
-                    <a href="/editar-epis">Editar/Excluir EPIs</a>
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Gerenciamento de EPIs</a>
+                    <div class="submenu">
+                        <a href="/epis">Cadastrar EPIs</a>
+                        <a href="/editar-epis">Editar/Excluir EPIs</a>
+                    </div>
                 </div>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Registro de Entrega de EPIs</a>
-                <div class="submenu">
-                    <a href="/entrega">Registrar Entrega EPIs</a>
-                    <a href="/consultar-entrega">Consultar/Editar Entrega</a>
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">Registro de Entrega de EPIs</a>
+                    <div class="submenu">
+                        <a href="/entrega">Registrar Entrega EPIs</a>
+                        <a href="/consultar-entrega">Consultar/Editar Entrega</a>
+                    </div>
                 </div>
-            </div>
-            <a href="/avisos">Avisos</a>
-        </nav>
+                <a href="/avisos">Avisos e Relatórios</a>
+            </nav>
+            <img src="https://i.ibb.co/wMFCyB3/6073873.png" alt="Ícone do usuário" class="user-icon">
+        </div>
     </header>
 </body>
+</html>
