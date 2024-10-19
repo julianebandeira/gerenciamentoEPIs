@@ -9,9 +9,9 @@
         <label for="colaborador">Colaborador:</label>
         <select id="colaborador" name="colaborador">
             <option value="">Todos os colaboradores</option>
-            {% for colaborador in colaboradores %}
-                <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
-            {% endfor %}
+             {% for colaborador in colaboradores %}
+            <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
+        {% endfor %}
         </select>
     </div>
     <div>
