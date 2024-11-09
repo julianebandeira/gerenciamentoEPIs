@@ -3,7 +3,7 @@ from django.urls import reverse
 from .models import Colaborador, EPI, Entrega
 from datetime import date
 
-class ViewsTestCase(TestCase):
+class TesteDeViews(TestCase):
     def setUp(self):
         # Inicializa o cliente de teste
         self.client = Client()
@@ -81,7 +81,7 @@ class ViewsTestCase(TestCase):
             [{'nome': 'João Silva', 'cpf': '123.456.789-00', 'telefone': '(11) 98765-4321', 'funcao': 'Operador'}]
         )
 
-class ModelsTestCase(TestCase):
+class TesteDeModels(TestCase):
     def setUp(self):
         # Criando instâncias de Colaborador e EPI para os testes
         self.colaborador = Colaborador.objects.create(
@@ -166,7 +166,7 @@ class ModelsTestCase(TestCase):
         self.assertIsNone(entrega.observacao)
 
     def test_related_data(self):
-        entrega = Entrega.objects.create(
+        Entrega.objects.create(
             equipamento=self.epi,
             colaborador=self.colaborador,
             data_emprestimo=date(2024, 1, 1),
