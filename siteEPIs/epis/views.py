@@ -185,6 +185,7 @@ def editar_entrega(request, entrega_id):
 
 def relatorio_entregas(request):
     colaboradores = Colaborador.objects.all().order_by('nome')
+    print(f"Número de colaboradores: {colaboradores.count()}")  # Debug print
     entregas = None
     filtro_aplicado = False
 
